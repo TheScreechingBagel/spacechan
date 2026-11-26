@@ -35,23 +35,16 @@ class Thread extends Model
         ];
     }
 
-
     /**
      * Check if the thread is owned by the given user. To show (You) on the page.
-     *
-     * @param User $user
-     * @return bool
      */
-    public function isOwnedBy(User $user): bool
+    public function isOwnedBy(?User $user): bool
     {
-        return $this->user_id === $user->id;
+        return $user !== null && $this->user_id === $user->id;
     }
 
     /**
      * Check if the user can delete the thread.
-     *
-     * @param User $user
-     * @return bool
      */
     public function canDelete(User $user): bool
     {

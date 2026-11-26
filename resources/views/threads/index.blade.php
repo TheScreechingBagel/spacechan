@@ -12,6 +12,9 @@
                 @else
                     Anonymous
                 @endif
+                @if ($thread->isOwnedBy(auth()->user()))
+                    (You)
+                @endif
                 on {{ $thread->created_at }}</p>
 
         </article>
