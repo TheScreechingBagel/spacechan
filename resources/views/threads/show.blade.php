@@ -6,7 +6,12 @@
 
     @foreach($posts as $post)
         <article class="mb-4 rounded border border-gray-300 p-4">
-            <h3>Post by {{ $post->name }} on {{ $post->created_at}}</h3>
+            <h3><p>post'd by @if($thread->name)
+                        {{ $thread->name }}
+                    @else
+                        Anonymous
+                    @endif
+                    on {{ $thread->created_at }}</p></h3>
             <p>{{ $post->text }}</p>
         </article>
 
