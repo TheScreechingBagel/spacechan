@@ -9,8 +9,8 @@
 
     @foreach($posts as $post)
         <article class="mb-4 rounded border border-gray-300 p-4">
-            <h3><p>post'd by @if($thread->name)
-                        {{ $thread->name }}
+            <h3><p>post'd by @if($post->name)
+                        {{ $post->name }}
                     @else
                         Anonymous
                     @endif
