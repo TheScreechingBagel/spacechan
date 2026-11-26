@@ -56,7 +56,7 @@ class ThreadController extends Controller
         $thread->delete();
 
         return redirect()
-            ->route('threads.index')
+            ->route('boards.show', $thread->board)
             ->with('success', 'Thread deleted.');
     }
 }

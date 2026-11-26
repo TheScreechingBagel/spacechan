@@ -1,5 +1,8 @@
 <x-site-layout title="spacechan">
 
+    <a href="{{ route('boards.show', $thread->board) }}" class="hover:underline">
+        back to /{{ $thread->board->slug }}/
+    </a>
     <h1>{{ $thread->subject }}</h1>
     <h2>Thread created by @if($thread->name)
             {{ $thread->name }}

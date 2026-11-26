@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\PostController as UserzonePostController;
@@ -11,7 +12,8 @@ use Illuminate\Support\Facades\Route;
  * Public Website routes
  */
 
-Route::get('/', [ThreadController::class, 'index'])->name('threads.index');
+Route::get('/', [BoardController::class, 'index'])->name('boards.index');
+Route::resource('boards', BoardController::class)->only(['show']);
 Route::resource('threads', ThreadController::class)->only(['show']);
 
 /*

@@ -3,7 +3,7 @@
 <header class="border-b border-orange-200 bg-orange-100">
     <div class="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
         <nav class="flex items-center gap-4">
-            <a href="{{ route('threads.index') }}" class="hover:underline">
+            <a href="{{ route('boards.index') }}" class="hover:underline">
                 <span class="text-lg font-bold text-red-800">spacechan</span>
             </a>
             @foreach ($menu as $label => $url)

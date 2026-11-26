@@ -1,5 +1,7 @@
-<x-site-layout title="spacechan">
+<x-site-layout :title="'/'.$board->slug.'/ - '.$board->title">
 
+    <h1>/{{ $board->slug }}/ - {{ $board->title }}</h1>
+    <p>{{ $board->description }}</p>
 
     @forelse($threads as $thread)
         <article class="mb-4 rounded border border-gray-300 p-4">
