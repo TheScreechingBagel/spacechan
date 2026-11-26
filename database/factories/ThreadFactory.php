@@ -14,9 +14,9 @@ class ThreadFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'subject' => $this->faker->word(),
-            'text' => $this->faker->text(),
+            'name' => $this->faker->optional(0.3)->name(),
+            'subject' => $this->faker->optional(0.7)->sentence(3),
+            'text' => $this->faker->paragraph(),
             'bumped_at' => Carbon::now(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
