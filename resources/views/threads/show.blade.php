@@ -1,7 +1,15 @@
 <x-site-layout title="spacechan">
 
     <h1>{{ $thread->subject }}</h1>
-    <h2>Thread created by {{ $thread->user->name }} on {{ $thread->created_at }}</h2>
+    <h2>Thread created by @if($thread->name)
+            {{ $thread->name }}
+        @else
+            Anonymous
+        @endif
+        @if ($thread->isOwnedBy(auth()->user()))
+            (You)
+        @endif
+        on {{ $thread->created_at }}</h2>
     @if ($thread->hasMedia('image'))
         <img src="{{ $thread->getFirstMediaUrl('image', 'web') }}" alt="" class="max-w-md">
     @endif
