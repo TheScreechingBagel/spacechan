@@ -42,6 +42,9 @@
                     @endif
                     on {{ $post->created_at }}</p></h3>
             <p>{{ $post->text }}</p>
+            @if (auth()->user()?->is_admin)
+                <a href="{{ route('admin.posts.edit', $post) }}" class="text-blue-800 hover:underline">Edit reply</a>
+            @endif
             @auth
                 @if ($post->canDelete(auth()->user()))
                     <form method="POST" action="{{ route('userzone.posts.destroy', $post) }}">

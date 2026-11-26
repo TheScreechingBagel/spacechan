@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BoardController as AdminBoardController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ThreadController as AdminThreadController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ThreadController;
@@ -48,4 +49,5 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('boards', AdminBoardController::class)->except(['show']);
     Route::resource('threads', AdminThreadController::class)->only(['edit', 'update']);
+    Route::resource('posts', AdminPostController::class)->only(['edit', 'update']);
 });
