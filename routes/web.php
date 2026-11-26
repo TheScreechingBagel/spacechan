@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\Userzone\DashboardController;
+use App\Http\Controllers\Userzone\PostController as UserzonePostController;
 use App\Http\Controllers\Userzone\ProfileController;
 use App\Http\Controllers\Userzone\ThreadController as UserzoneThreadController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user')->name('userzone.')->group(function () {
         Route::resource('threads', UserzoneThreadController::class)->only(['create', 'store']);
+        Route::resource('posts', UserzonePostController::class)->only(['store']);
     });
 
     // For the user's profile management
