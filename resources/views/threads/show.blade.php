@@ -12,6 +12,9 @@
         @if ($thread->isOwnedBy(auth()->user()))
             (You)
         @endif
+        @if (auth()->user()?->is_admin)
+            [{{ $thread->user->name }}]
+        @endif
         on {{ $thread->created_at }}</h2>
     @if ($thread->hasMedia('image'))
         <img src="{{ $thread->getFirstMediaUrl('image', 'web') }}" alt="" class="max-w-md">
@@ -39,6 +42,9 @@
                     @endif
                     @if ($post->isOwnedBy(auth()->user()))
                         (You)
+                    @endif
+                    @if (auth()->user()?->is_admin)
+                        [{{ $post->user->name }}]
                     @endif
                     on {{ $post->created_at }}</p></h3>
             <p>{{ $post->text }}</p>

@@ -8,11 +8,11 @@ use Illuminate\View\View;
 class ThreadController extends Controller
 {
     /**
-     * thread with its posts, oldest first.
+     * thread with its posts, oldest first. the users are loaded so admins can see who wrote each post
      */
     public function show(Thread $thread): View
     {
-        $posts = $thread->posts()->oldest('created_at')->get();
+        $posts = $thread->posts()->with('user')->oldest('created_at')->get();
 
         return view('threads.show', [
             'thread' => $thread, 'posts' => $posts,
