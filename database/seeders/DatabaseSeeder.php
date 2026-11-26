@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Board;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
@@ -31,7 +32,13 @@ class DatabaseSeeder extends Seeder
 
         $users = User::all();
 
-        $threads = Thread::factory(15)->recycle($users)->create();
+        Board::factory()->create(['slug' => 'hs', 'title' => 'Harbour Space', 'description' => 'Campus life, classes and teachers.']);
+        Board::factory()->create(['slug' => 'g', 'title' => 'Technology', 'description' => 'Code, computers and gadgets.']);
+        Board::factory()->create(['slug' => 'b', 'title' => 'Random', 'description' => 'Anything else.']);
+
+        $boards = Board::all();
+
+        $threads = Thread::factory(15)->recycle($boards)->recycle($users)->create();
 
         foreach ($threads as $thread) {
             $replies = Post::factory(fake()->numberBetween(0, 8))
