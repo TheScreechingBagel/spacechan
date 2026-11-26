@@ -17,7 +17,7 @@
                     @if ($post->isOwnedBy(auth()->user()))
                         (You)
                     @endif
-                    on {{ $thread->created_at }}</p></h3>
+                    on {{ $post->created_at }}</p></h3>
             <p>{{ $post->text }}</p>
         </article>
 
