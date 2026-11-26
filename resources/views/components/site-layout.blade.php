@@ -28,5 +28,7 @@
     {{ $slot }}
 </main>
 
+<x-site-footer :menu="$menu"></x-site-footer>
+
 </body>
 </html>
