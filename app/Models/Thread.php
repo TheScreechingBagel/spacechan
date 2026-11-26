@@ -43,6 +43,7 @@ class Thread extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
+        $this->addMediaConversion('thumb')->fit(Fit::Max, 250, 250)->format('webp')->nonQueued();
         $this->addMediaConversion('web')->fit(Fit::Max, 1200, 1200)->format('webp')->nonQueued();
     }
 

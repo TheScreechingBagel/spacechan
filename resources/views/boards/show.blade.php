@@ -8,6 +8,9 @@
 
     @forelse($threads as $thread)
         <article class="mb-4 rounded border border-gray-300 p-4">
+            @if ($thread->hasMedia('image'))
+                <img src="{{ $thread->getFirstMediaUrl('image', 'thumb') }}" alt="" class="max-w-32">
+            @endif
             <a href="{{ route('threads.show', $thread) }}" class="hover:underline">
                 [{{$thread->id}}] {{ $thread->subject }}
             </a>

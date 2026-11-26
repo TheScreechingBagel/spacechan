@@ -24,7 +24,7 @@ class BoardController extends Controller
     {
         return view('boards.show', [
             'board' => $board,
-            'threads' => $board->threads()->latest('bumped_at')->get(),
+            'threads' => $board->threads()->with('media')->latest('bumped_at')->get(),
         ]);
     }
 }
