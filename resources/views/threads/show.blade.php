@@ -36,6 +36,15 @@
                     @endif
                     on {{ $post->created_at }}</p></h3>
             <p>{{ $post->text }}</p>
+            @auth
+                @if ($post->canDelete(auth()->user()))
+                    <form method="POST" action="{{ route('userzone.posts.destroy', $post) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-600 hover:underline">Delete reply</button>
+                    </form>
+                @endif
+            @endauth
         </article>
 
     @endforeach

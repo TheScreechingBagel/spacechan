@@ -29,7 +29,6 @@ class Post extends Model
 
     public function canDelete(User $user): bool
     {
-        //        return $this->isOwnedBy($user) || $user->is_admin;
-        return $user->is_admin;
+        return $this->isOwnedBy($user) || $user->is_admin;
     }
 }

@@ -19,11 +19,25 @@ class PostController extends Controller
         $post = Post::create([
             ...$validated,
             'user_id' => auth()->id(),
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         // Update the thread's bumped_at timestamp
         $post->thread->update(['bumped_at' => now()]);
+
         return redirect()->route('threads.show', $post->thread);
+    }
+
+    public function destroy(Post $post): RedirectResponse
+    {
+        if (! $post->canDelete(auth()->user())) {
+            abort(403);
+        }
+
+        $post->delete();
+
+        return redirect()
+            ->route('threads.show', $post->thread_id)
+            ->with('success', 'Reply deleted.');
     }
 }

@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user')->name('userzone.')->group(function () {
         Route::resource('threads', UserzoneThreadController::class)->only(['create', 'store', 'destroy']);
-        Route::resource('posts', UserzonePostController::class)->only(['store']);
+        Route::resource('posts', UserzonePostController::class)->only(['store', 'destroy']);
     });
 
     // For the user's profile management
