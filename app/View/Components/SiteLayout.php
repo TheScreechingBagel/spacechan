@@ -12,6 +12,7 @@ class SiteLayout extends Component
     public function __construct(public string $title = 'spacechan')
     {
         $this->menu = ['Board' => route('threads.index')];
+        $this->title = $title;
     }
 
     public function render(): View

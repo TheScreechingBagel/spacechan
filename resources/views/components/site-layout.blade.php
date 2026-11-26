@@ -14,6 +14,8 @@
 </head>
 <body>
 
+<x-site-header :menu="$menu"></x-site-header>
+
 <main class="mx-auto max-w-4xl space-y-4 px-4 py-6">
     @if (session('success'))
         <p class="rounded bg-green-100 p-3 text-green-800">{{ session('success') }}</p>
