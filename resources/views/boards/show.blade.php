@@ -2,6 +2,9 @@
 
     <h1>/{{ $board->slug }}/ - {{ $board->title }}</h1>
     <p>{{ $board->description }}</p>
+    <a href="{{ route('userzone.boards.threads.create', $board) }}" class="text-blue-800 hover:underline">
+        Start a new thread
+    </a>
 
     @forelse($threads as $thread)
         <article class="mb-4 rounded border border-gray-300 p-4">

@@ -13,7 +13,6 @@ class SiteLayout extends Component
     {
         $this->menu = [
             'Boards' => route('boards.index'),
-            'Create Thread' => route('userzone.threads.create'),
         ];
         $this->title = $title;
     }

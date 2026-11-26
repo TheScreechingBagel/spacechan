@@ -29,7 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::prefix('user')->name('userzone.')->group(function () {
-        Route::resource('threads', UserzoneThreadController::class)->only(['create', 'store', 'destroy']);
+        Route::resource('boards.threads', UserzoneThreadController::class)->only(['create', 'store']);
+        Route::resource('threads', UserzoneThreadController::class)->only(['destroy']);
         Route::resource('posts', UserzonePostController::class)->only(['store', 'destroy']);
     });
 

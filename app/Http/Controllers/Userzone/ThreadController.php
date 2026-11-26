@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Userzone;
 
 use App\Http\Controllers\Controller;
+use App\Models\Board;
 use App\Models\Thread;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -12,12 +13,12 @@ class ThreadController extends Controller
     /**
      * form to make a new thread
      */
-    public function create(): View
+    public function create(Board $board): View
     {
-        return view('userzone.threads.create');
+        return view('userzone.threads.create', ['board' => $board]);
     }
 
-    public function store(): RedirectResponse
+    public function store(Board $board): RedirectResponse
     {
         $validated = request()->validate([
             'name' => ['nullable', 'string', 'max:64'],
@@ -26,7 +27,7 @@ class ThreadController extends Controller
             'image' => ['nullable', 'image', 'max:4096', 'mimes:jpg,jpeg,png,gif,webp'],
         ]);
 
-        $thread = Thread::create([
+        $thread = $board->threads()->create([
             'name' => $validated['name'] ?? null,
             'subject' => $validated['subject'] ?? null,
             'text' => $validated['text'],
