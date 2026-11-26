@@ -43,4 +43,20 @@ class ThreadController extends Controller
             ->route('threads.show', $thread)
             ->with('success', 'Thread created successfully.');
     }
+
+    /**
+     * delete a thread, its replies go with it (cascadeOnDelete)
+     */
+    public function destroy(Thread $thread): RedirectResponse
+    {
+        if (! $thread->canDelete(auth()->user())) {
+            abort(403);
+        }
+
+        $thread->delete();
+
+        return redirect()
+            ->route('threads.index')
+            ->with('success', 'Thread deleted.');
+    }
 }

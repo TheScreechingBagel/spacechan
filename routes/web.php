@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\PostController as UserzonePostController;
@@ -15,12 +14,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [ThreadController::class, 'index'])->name('threads.index');
 Route::resource('threads', ThreadController::class)->only(['show']);
 
-
 /*
  * Authentication routes
  */
-require __DIR__ . '/auth.php';
-
+require __DIR__.'/auth.php';
 
 /*
  * Userzone routes
@@ -30,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::prefix('user')->name('userzone.')->group(function () {
-        Route::resource('threads', UserzoneThreadController::class)->only(['create', 'store']);
+        Route::resource('threads', UserzoneThreadController::class)->only(['create', 'store', 'destroy']);
         Route::resource('posts', UserzonePostController::class)->only(['store']);
     });
 

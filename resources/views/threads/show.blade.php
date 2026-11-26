@@ -14,6 +14,15 @@
         <img src="{{ $thread->getFirstMediaUrl('image', 'web') }}" alt="" class="max-w-md">
     @endif
     <p>{{$thread->text}}</p>
+    @auth
+        @if ($thread->canDelete(auth()->user()))
+            <form method="POST" action="{{ route('userzone.threads.destroy', $thread) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="text-red-600 hover:underline">Delete thread</button>
+            </form>
+        @endif
+    @endauth
 
     @foreach($posts as $post)
         <article class="mb-4 rounded border border-gray-300 p-4">
