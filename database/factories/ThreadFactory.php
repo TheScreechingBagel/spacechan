@@ -26,4 +26,17 @@ class ThreadFactory extends Factory
             'user_id' => User::factory(),
         ];
     }
+
+    /**
+     * attach one of the sample photos in database/factories/images.
+     * preservingOriginal() copies the photo so the sample file stays where it is
+     */
+    public function withImage(): static
+    {
+        return $this->afterCreating(function (Thread $thread) {
+            $thread->addMedia(fake()->randomElement(glob(database_path('factories/images/*.jpg'))))
+                ->preservingOriginal()
+                ->toMediaCollection('image');
+        });
+    }
 }

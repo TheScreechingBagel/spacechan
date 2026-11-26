@@ -38,16 +38,18 @@ class DatabaseSeeder extends Seeder
 
         $boards = Board::all();
 
-        $threads = Thread::factory(15)->recycle($boards)->recycle($users)->create();
+        Thread::factory(12)->withImage()->recycle($boards)->recycle($users)->create();
+        Thread::factory(3)->recycle($boards)->recycle($users)->create();
+        $threads = Thread::all();
 
         foreach ($threads as $thread) {
-            $replies = Post::factory(fake()->numberBetween(0, 8))
-                ->recycle($users)
-                ->for($thread)
-                ->create();
+            Post::factory(fake()->numberBetween(0, 6))->recycle($users)->for($thread)->create();
+            Post::factory(fake()->numberBetween(0, 2))->withImage()->recycle($users)->for($thread)->create();
 
-            if ($replies->isNotEmpty()) {
-                $thread->update(['bumped_at' => $replies->max('created_at')]);
+            $lastReplyAt = $thread->posts()->max('created_at');
+
+            if ($lastReplyAt) {
+                $thread->update(['bumped_at' => $lastReplyAt]);
             }
         }
     }
