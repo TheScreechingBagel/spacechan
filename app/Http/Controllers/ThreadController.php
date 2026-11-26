@@ -12,7 +12,7 @@ class ThreadController extends Controller
      */
     public function show(Thread $thread): View
     {
-        $posts = $thread->posts()->with('user')->oldest('created_at')->get();
+        $posts = $thread->posts()->with(['user', 'media'])->oldest('created_at')->get();
 
         return view('threads.show', [
             'thread' => $thread, 'posts' => $posts,

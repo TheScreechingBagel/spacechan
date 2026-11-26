@@ -14,13 +14,20 @@ class PostController extends Controller
             'thread_id' => ['required', 'exists:threads,id'],
             'name' => ['nullable', 'string', 'max:64'],
             'text' => ['required', 'string', 'max:10000'],
+            'image' => ['nullable', 'image', 'max:4096', 'mimes:jpg,jpeg,png,gif,webp'],
         ]);
 
         $post = Post::create([
-            ...$validated,
+            'thread_id' => $validated['thread_id'],
+            'name' => $validated['name'] ?? null,
+            'text' => $validated['text'],
             'user_id' => auth()->id(),
             'created_at' => now(),
         ]);
+
+        if (request()->hasFile('image')) {
+            $post->addMediaFromRequest('image')->toMediaCollection('image');
+        }
 
         // Update the thread's bumped_at timestamp
         $post->thread->update(['bumped_at' => now()]);

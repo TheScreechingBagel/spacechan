@@ -3,6 +3,8 @@
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 it('sends guests to the login page when they reply', function () {
     $thread = Thread::factory()->create();
@@ -31,6 +33,34 @@ it('saves a reply owned by the poster', function () {
         'user_id' => $user->id,
         'text' => 'Hello',
     ]);
+});
+
+it('stores an image with the reply', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    $thread = Thread::factory()->create();
+
+    $this->actingAs($user)->post(route('userzone.posts.store'), [
+        'thread_id' => $thread->id,
+        'text' => 'With a picture',
+        'image' => UploadedFile::fake()->image('photo.jpg'),
+    ]);
+
+    expect(Post::sole()->hasMedia('image'))->toBeTrue();
+});
+
+it('rejects a reply upload that is not an image', function () {
+    $user = User::factory()->create();
+    $thread = Thread::factory()->create();
+
+    $response = $this->actingAs($user)->post(route('userzone.posts.store'), [
+        'thread_id' => $thread->id,
+        'text' => 'With a file',
+        'image' => UploadedFile::fake()->create('notes.pdf', 10, 'application/pdf'),
+    ]);
+
+    $response->assertSessionHasErrors(['image']);
+    expect(Post::count())->toBe(0);
 });
 
 it('bumps the thread when someone replies', function () {

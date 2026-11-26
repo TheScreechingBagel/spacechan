@@ -47,6 +47,9 @@
                         [{{ $post->user->name }}]
                     @endif
                     on {{ $post->created_at }}</p></h3>
+            @if ($post->hasMedia('image'))
+                <img src="{{ $post->getFirstMediaUrl('image', 'web') }}" alt="" class="max-w-xs">
+            @endif
             <p>{{ $post->text }}</p>
             @if (auth()->user()?->is_admin)
                 <a href="{{ route('admin.posts.edit', $post) }}" class="text-blue-800 hover:underline">Edit reply</a>
@@ -67,12 +70,13 @@
     <p>{{ $posts->count() }} posts in this thread.</p>
 
     @auth
-        <form method="POST" action="{{ route('userzone.posts.store') }}"
+        <form method="POST" action="{{ route('userzone.posts.store') }}" enctype="multipart/form-data"
               class="space-y-4 bg-white p-6 shadow-xs sm:rounded-lg">
             @csrf
             <input type="hidden" name="thread_id" value="{{ $thread->id }}">
             <x-form-text-input label="Name (optional, leave empty to post as Anonymous)" name="name"/>
             <x-form-textarea label="Text" name="text" required/>
+            <x-form-file-input label="Image (optional)" name="image"/>
             <x-breeze.primary-button>Post reply</x-breeze.primary-button>
         </form>
     @endauth
