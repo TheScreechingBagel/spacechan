@@ -23,14 +23,21 @@ class ThreadController extends Controller
             'name' => ['nullable', 'string', 'max:64'],
             'subject' => ['nullable', 'string', 'max:128'],
             'text' => ['required', 'string', 'max:10000'],
+            'image' => ['nullable', 'image', 'max:4096', 'mimes:jpg,jpeg,png,gif,webp'],
         ]);
 
         $thread = Thread::create([
-                ...$validated,
-                'user_id' => auth()->id(),
-                'bumped_at' => now(),
-            ]
+            'name' => $validated['name'] ?? null,
+            'subject' => $validated['subject'] ?? null,
+            'text' => $validated['text'],
+            'user_id' => auth()->id(),
+            'bumped_at' => now(),
+        ]
         );
+
+        if (request()->hasFile('image')) {
+            $thread->addMediaFromRequest('image')->toMediaCollection('image');
+        }
 
         return redirect()
             ->route('threads.show', $thread)
