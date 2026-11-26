@@ -1,21 +1,23 @@
 <?php
 
+
+use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
-use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
  * Public Website routes
  */
-Route::get('/', WelcomeController::class)->name('welcome');
 
-// Todo: add your public routes here
+Route::get('/', [ThreadController::class, 'index'])->name('threads.index');
+Route::resource('threads', ThreadController::class)->only(['show']);
+
 
 /*
  * Authentication routes
  */
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 
 /*
