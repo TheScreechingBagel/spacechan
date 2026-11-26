@@ -17,6 +17,9 @@
         <img src="{{ $thread->getFirstMediaUrl('image', 'web') }}" alt="" class="max-w-md">
     @endif
     <p>{{$thread->text}}</p>
+    @if (auth()->user()?->is_admin)
+        <a href="{{ route('admin.threads.edit', $thread) }}" class="text-blue-800 hover:underline">Edit thread</a>
+    @endif
     @auth
         @if ($thread->canDelete(auth()->user()))
             <form method="POST" action="{{ route('userzone.threads.destroy', $thread) }}">
