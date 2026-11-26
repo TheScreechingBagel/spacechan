@@ -81,6 +81,19 @@ it('lets the owner delete their thread and its replies', function () {
     $this->assertModelMissing($reply);
 });
 
+it('removes the images of the replies along with the thread', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    $thread = Thread::factory()->for($user)->create();
+    $reply = Post::factory()->for($thread)->create();
+    $media = $reply->addMedia(UploadedFile::fake()->image('photo.jpg'))->toMediaCollection('image');
+
+    $this->actingAs($user)->delete(route('userzone.threads.destroy', $thread));
+
+    $this->assertModelMissing($media);
+    Storage::disk('public')->assertMissing($media->getPathRelativeToRoot());
+});
+
 it('lets an admin delete any thread', function () {
     $admin = User::factory()->admin()->create();
     $thread = Thread::factory()->create();

@@ -46,12 +46,17 @@ class ThreadController extends Controller
     }
 
     /**
-     * delete a thread, its replies go with it (cascadeOnDelete)
+     * delete a thread and its replies. the replies are deleted one by one
+     * so media library also removes their images
      */
     public function destroy(Thread $thread): RedirectResponse
     {
         if (! $thread->canDelete(auth()->user())) {
             abort(403);
+        }
+
+        foreach ($thread->posts as $post) {
+            $post->delete();
         }
 
         $thread->delete();
