@@ -24,4 +24,12 @@ class Board extends Model
     {
         return $this->hasMany(Thread::class);
     }
+
+    /**
+     * a board can only be deleted when it has no threads left
+     */
+    public function canDelete(): bool
+    {
+        return $this->threads()->doesntExist();
+    }
 }

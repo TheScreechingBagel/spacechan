@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BoardController as AdminBoardController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\Userzone\DashboardController;
@@ -38,4 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+/*
+ * Admin routes
+ */
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::resource('boards', AdminBoardController::class)->except(['show']);
 });

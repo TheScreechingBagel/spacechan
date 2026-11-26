@@ -14,6 +14,11 @@ class SiteLayout extends Component
         $this->menu = [
             'Boards' => route('boards.index'),
         ];
+
+        if (auth()->user()?->is_admin) {
+            $this->menu['Manage boards'] = route('admin.boards.index');
+        }
+
         $this->title = $title;
     }
 
