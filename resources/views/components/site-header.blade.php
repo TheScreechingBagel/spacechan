@@ -13,7 +13,8 @@
 
         <div class="flex items-center gap-4 text-sm">
             @auth
-                {{--                <a href="{{ route('profile.edit') }}" class="text-blue-800 hover:underline">Profile</a>--}}
+                <a href="{{ route('profile.edit') }}"
+                   class="hover:underline border border-beige p-1">{{ auth()->user()->name }}</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="text-blue-800 hover:underline">Log out</button>
