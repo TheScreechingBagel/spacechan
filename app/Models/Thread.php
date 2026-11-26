@@ -18,6 +18,11 @@ class Thread extends Model implements HasMedia
 
     protected $guarded = [];
 
+    public function board(): BelongsTo
+    {
+        return $this->belongsTo(Board::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
