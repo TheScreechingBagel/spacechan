@@ -117,3 +117,23 @@ it('refuses to delete the reply of another user', function () {
     $response->assertForbidden();
     $this->assertModelExists($post);
 });
+
+it('slows down a user who posts too many replies in a minute', function () {
+    $user = User::factory()->create();
+    $thread = Thread::factory()->create();
+
+    foreach (range(1, 10) as $i) {
+        $this->actingAs($user)->post(route('userzone.posts.store'), [
+            'thread_id' => $thread->id,
+            'text' => 'Reply '.$i,
+        ]);
+    }
+
+    $response = $this->actingAs($user)->post(route('userzone.posts.store'), [
+        'thread_id' => $thread->id,
+        'text' => 'One too many',
+    ]);
+
+    $response->assertTooManyRequests();
+    expect(Post::count())->toBe(10);
+});

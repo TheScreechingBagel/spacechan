@@ -31,7 +31,8 @@ Route::middleware('auth')->group(function () {
     // For the user's dashboard (after login)
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    Route::prefix('user')->name('userzone.')->group(function () {
+    // throttle: at most 10 requests per minute for each logged-in user
+    Route::prefix('user')->name('userzone.')->middleware('throttle:10,1')->group(function () {
         Route::resource('boards.threads', UserzoneThreadController::class)->only(['create', 'store']);
         Route::resource('threads', UserzoneThreadController::class)->only(['destroy']);
         Route::resource('posts', UserzonePostController::class)->only(['store', 'destroy']);
