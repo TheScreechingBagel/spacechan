@@ -70,15 +70,18 @@
     <p>{{ $posts->count() }} posts in this thread.</p>
 
     @auth
-        <form method="POST" action="{{ route('userzone.posts.store') }}" enctype="multipart/form-data"
-              class="space-y-4 bg-white p-6 shadow-xs sm:rounded-lg">
-            @csrf
-            <input type="hidden" name="thread_id" value="{{ $thread->id }}">
-            <x-form-text-input label="Name (optional, leave empty to post as Anonymous)" name="name"/>
-            <x-form-textarea label="Text" name="text" required/>
-            <x-form-file-input label="Image (optional)" name="image"/>
-            <x-breeze.primary-button>Post reply</x-breeze.primary-button>
-        </form>
+        <div class="flex items-end gap-4">
+            <form method="POST" action="{{ route('userzone.posts.store') }}" enctype="multipart/form-data"
+                  class="flex-1 space-y-4 bg-white p-6 shadow-xs sm:rounded-lg">
+                @csrf
+                <input type="hidden" name="thread_id" value="{{ $thread->id }}">
+                <x-form-text-input label="Name (optional, leave empty to post as Anonymous)" name="name"/>
+                <x-form-textarea label="Text" name="text" required/>
+                <x-form-file-input label="Image (optional)" name="image"/>
+                <x-breeze.primary-button>Post reply</x-breeze.primary-button>
+            </form>
+            <x-mascot class="hidden h-64 w-auto sm:block"/>
+        </div>
     @endauth
     @guest
         <p>Please <a href="{{ route('login') }}" class="text-blue-500 hover:underline">log in</a> to post a reply.</p>
