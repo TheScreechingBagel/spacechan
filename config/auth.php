@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 return [
 
     /*
@@ -62,7 +64,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', User::class),
         ],
 
         // 'users' => [
@@ -111,5 +113,18 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Allowed Email Domain
+    |--------------------------------------------------------------------------
+    |
+    | When set (for example "student.harbour.space"), only email addresses at
+    | that domain can register or be used on a profile. Leave it empty to
+    | allow every email address.
+    |
+    */
+
+    'allowed_email_domain' => env('AUTH_ALLOWED_EMAIL_DOMAIN'),
 
 ];

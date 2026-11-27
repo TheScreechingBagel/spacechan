@@ -22,3 +22,16 @@ it('removes the thread and reply images of a deleted account from disk', functio
 
     expect(Storage::disk('public')->allFiles())->toBeEmpty();
 });
+
+it('refuses to change the email to one outside the allowed domain', function () {
+    config(['auth.allowed_email_domain' => 'student.harbour.space']);
+    $user = User::factory()->create(['email' => 'me@student.harbour.space']);
+
+    $response = $this->actingAs($user)->patch(route('profile.update'), [
+        'name' => $user->name,
+        'email' => 'me@example.com',
+    ]);
+
+    $response->assertSessionHasErrors('email');
+    expect($user->fresh()->email)->toBe('me@student.harbour.space');
+});
