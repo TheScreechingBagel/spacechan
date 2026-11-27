@@ -149,6 +149,40 @@ Seeded accounts, both with the password `password`:
 - Admin: `Admin` — `admin@example.com`
 - Test: `Test User` — `test@example.com`
 
+## Deploy
+
+The container (`Containerfile`, `compose.yaml`) serves the site over HTTPS at `SUBDOMAIN.DOMAIN`, with a Let's Encrypt certificate through deSEC and an A record that follows the machine's local IP.
+
+1. Copy `container/.env.example` to `container/.env` and fill it in. Get an `APP_KEY` with `php artisan key:generate --show`. For Gmail, use an app password as `MAIL_PASSWORD`.
+2. Let the container bind ports 80 and 443 as a normal user:
+
+   ```sh
+   echo 'net.ipv4.ip_unprivileged_port_start=80' | sudo tee /etc/sysctl.d/99-unprivileged-ports.conf
+   sudo sysctl --system
+   ```
+
+3. Build and start it:
+
+   ```sh
+   docker compose up -d --build
+   ```
+
+4. Create the tables. The image has no shell, so artisan runs through FrankenPHP. Don't seed: the seeder is for development only.
+
+   ```sh
+   docker compose exec app frankenphp php-cli artisan migrate --force
+   ```
+
+5. Register on the site, verify your email, then make your account an admin:
+
+   ```sh
+   docker compose exec app frankenphp php-cli artisan tinker --execute 'App\Models\User::where("email", "you@student.harbour.space")->update(["is_admin" => true]);'
+   ```
+
+6. Create the boards at `/admin/boards`.
+
+To update, pull the new code and run `docker compose up -d --build`, then step 4 again if there are new migrations.
+
 ## next additions
 
 - guest posting
