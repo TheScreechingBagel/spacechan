@@ -12,14 +12,15 @@
                 <img src="{{ $thread->getFirstMediaUrl('image', 'thumb') }}" alt="" class="max-w-32">
             @endif
             <a href="{{ route('threads.show', $thread) }}" class="hover:underline">
-                [{{$thread->id}}] {{ $thread->subject }}
+                <span class="text-gray-500">[{{$thread->id}}]</span>
+                <strong class="text-lg">{{ $thread->subject }}</strong>
             </a>
 
-            <p>Thread created by @if($thread->name)
+            <p class="text-sm text-gray-600">Thread created by <strong class="text-gray-900">@if($thread->name)
                     {{ $thread->name }}
                 @else
                     Anonymous
-                @endif
+                @endif</strong>
                 @if ($thread->isOwnedBy(auth()->user()))
                     (You)
                 @endif

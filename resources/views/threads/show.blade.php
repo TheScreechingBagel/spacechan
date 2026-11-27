@@ -3,12 +3,12 @@
     <a href="{{ route('boards.show', $thread->board) }}" class="hover:underline">
         back to /{{ $thread->board->slug }}/
     </a>
-    <h1>{{ $thread->subject }}</h1>
-    <h2>Thread created by @if($thread->name)
+    <h1 class="text-2xl font-bold">{{ $thread->subject }}</h1>
+    <h2 class="text-sm text-gray-600">Thread created by <strong class="text-gray-900">@if($thread->name)
             {{ $thread->name }}
         @else
             Anonymous
-        @endif
+        @endif</strong>
         @if ($thread->isOwnedBy(auth()->user()))
             (You)
         @endif
@@ -35,18 +35,18 @@
 
     @foreach($posts as $post)
         <article class="mb-4 rounded border border-gray-300 p-4">
-            <h3><p>post'd by @if($post->name)
+            <h3 class="text-sm text-gray-600">post'd by <strong class="text-gray-900">@if($post->name)
                         {{ $post->name }}
                     @else
                         Anonymous
-                    @endif
+                    @endif</strong>
                     @if ($post->isOwnedBy(auth()->user()))
                         (You)
                     @endif
                     @if (auth()->user()?->is_admin)
                         [{{ $post->user->name }}]
                     @endif
-                    on {{ $post->created_at }}</p></h3>
+                    on {{ $post->created_at }}</h3>
             @if ($post->hasMedia('image'))
                 <img src="{{ $post->getFirstMediaUrl('image', 'web') }}" alt="" class="max-w-xs">
             @endif
