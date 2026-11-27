@@ -31,6 +31,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN install-php-extensions pdo_sqlite gd exif intl zip pcntl opcache
 
+# php.ini-production only allows 2 MB uploads, the forms accept images up to 4 MB
+RUN echo 'upload_max_filesize = 5M' > /usr/local/etc/php/conf.d/uploads.ini
+
 # Collect the shared libraries FrankenPHP and the extensions need,
 # because the final image has no package manager (from the FrankenPHP docs).
 RUN <<-EOF
