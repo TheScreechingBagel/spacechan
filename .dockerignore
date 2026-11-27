@@ -20,3 +20,6 @@ storage/framework/views/*
 storage/app/public/*
 database/database.sqlite
 tests
+storage/debugbar/*
+storage/pail
+storage/framework/testing
