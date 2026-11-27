@@ -51,6 +51,19 @@ class ProfileController extends Controller
 
         Auth::logout();
 
+        // delete the user's threads and replies one by one, so media library
+        // also removes their images from disk (a database cascade would not)
+        foreach ($user->threads()->with('posts')->get() as $thread) {
+            foreach ($thread->posts as $post) {
+                $post->delete();
+            }
+            $thread->delete();
+        }
+
+        foreach ($user->posts()->get() as $post) {
+            $post->delete();
+        }
+
         $user->delete();
 
         $request->session()->invalidate();
