@@ -130,3 +130,15 @@ it('refuses to delete the thread of another user', function () {
     $response->assertForbidden();
     $this->assertModelExists($thread);
 });
+
+it('asks a user to verify their email before starting a thread', function () {
+    $user = User::factory()->unverified()->create();
+    $board = Board::factory()->create();
+
+    $response = $this->actingAs($user)->post(route('userzone.boards.threads.store', $board), [
+        'text' => 'First post',
+    ]);
+
+    $response->assertRedirect(route('verification.notice'));
+    expect(Thread::count())->toBe(0);
+});

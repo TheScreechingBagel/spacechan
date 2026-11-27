@@ -28,11 +28,12 @@ require __DIR__.'/auth.php';
  * Userzone routes
  */
 Route::middleware('auth')->group(function () {
-    // For the user's dashboard (after login)
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    // For the user's dashboard (after login), only with a verified email address
+    Route::get('/dashboard', DashboardController::class)->middleware('verified')->name('dashboard');
 
+    // verified: posting needs a verified email address
     // throttle: at most 10 requests per minute for each logged-in user
-    Route::prefix('user')->name('userzone.')->middleware('throttle:10,1')->group(function () {
+    Route::prefix('user')->name('userzone.')->middleware(['verified', 'throttle:10,1'])->group(function () {
         Route::resource('boards.threads', UserzoneThreadController::class)->only(['create', 'store']);
         Route::resource('threads', UserzoneThreadController::class)->only(['destroy']);
         Route::resource('posts', UserzonePostController::class)->only(['store', 'destroy']);

@@ -156,3 +156,16 @@ it('slows down a user who posts too many replies in a minute', function () {
     $response->assertTooManyRequests();
     expect(Post::count())->toBe(10);
 });
+
+it('asks a user to verify their email before replying', function () {
+    $user = User::factory()->unverified()->create();
+    $thread = Thread::factory()->create();
+
+    $response = $this->actingAs($user)->post(route('userzone.posts.store'), [
+        'thread_id' => $thread->id,
+        'text' => 'Hello',
+    ]);
+
+    $response->assertRedirect(route('verification.notice'));
+    expect(Post::count())->toBe(0);
+});
