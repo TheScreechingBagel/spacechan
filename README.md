@@ -1,88 +1,156 @@
-<h1 align="center">Educational Starter Pack<br><sub>for</sub></h1>
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Spacechan
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Imageboard for Harbour Space
 
+An imageboard is an online forum where images are central to posts, often alongside text and discussion. ([Wikipedia, “Imageboard”](https://en.wikipedia.org/wiki/Imageboard))
 
+## what it does
+
+- browse boards, threads, and replies
+- create threads and replies with optional images; login required to post
+- delete your own threads and replies
+- admins manage boards and edit threads and replies
+- replies bump threads to the top
+
+```mermaid
 ---
-
-## About this Starter Pack
-
-This is a starter pack for **Laravel tailored for educational purposes**.
-
-It is aimed at helping students and beginners to quickly set up a Laravel development environment that allows for 
-learning the basics without the need to configure everything from scratch.
-
-### Changes from the original Laravel repository
-It provides a pre-configured environment with some opinionated settings and packages for the educational context. 
-Initial customisation was done based on Laravel version 12.x. (12.37.0 on November 9th, 2025).
-Updated to Laravel 13.x (13.42 on November 11th, 2026), running on PHP 8.5, including now also Laravel Boost.
-
-- Added **barryvdh/laravel-debugbar** for debug info in the browser
-- Altered **.env.example** for local development (SQLite database, debug mode on, cache and session set to file)
-- Added **roave/security-advisories** to prevent installation of packages with known security issues
-- Added **laravel/boost** for AI assisted code generation, including skills for Claude Code and Codex
-- Used **laravel/breeze** for authentication scaffolding with Blade templates (but moved all of the component views to a `components.breeze` subfolder for better organization; the Breeze package itself is no longer required)
-- Front-end assets are built with **Vite 8** and **Tailwind CSS 4**, with a fallback to **CDN includes of Tailwind CSS and Alpine JS** when no build is present
-- Replaced PHPUnit by **Pest PHP** for testing, kept basic example tests
-- Some other small tweaks in configuration files, routes, controller, and view organisation to better reflect the educational purpose (rigid structure)
-
-No front-end build is needed to get started. When there is no Vite build in `public/build`, the application falls back to CDN-hosted Tailwind CSS and Alpine JS. Running `npm run build` (or `npm run dev`) switches it to the compiled assets.
-
-Everything that follows below (and the shields in the header) are part of the original Laravel README.md file.
-
+config:
+  class:
+    hideEmptyMembersBox: true
 ---
-## About Laravel
+classDiagram
+    direction LR
+    class User {
+        id
+        name
+        email
+        password
+        is_admin
+        threads()
+        posts()
+    }
+    class Board {
+        id
+        slug
+        title
+        description?
+        threads()
+        canDelete()
+    }
+    class Thread {
+        id
+        board_id FK
+        user_id FK
+        name?
+        subject?
+        text
+        bumped_at
+        board()
+        user()
+        posts()
+        isOwnedBy(user)
+        canDelete(user)
+    }
+    class Post {
+        id
+        thread_id FK
+        user_id FK
+        name?
+        text
+        thread()
+        user()
+        isOwnedBy(user)
+        canDelete(user)
+    }
+    class Media {
+        <<Media Library>>
+    }
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+    Board --> Thread : hasMany threads()
+    Thread --> Board : belongsTo board()
+    User --> Thread : hasMany threads()
+    Thread --> User : belongsTo user()
+    Thread --> Post : hasMany posts()
+    Post --> Thread : belongsTo thread()
+    User --> Post : hasMany posts()
+    Post --> User : belongsTo user()
+    Thread ..> Media : image
+    Post ..> Media : image
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Each class lists its columns, then its methods: the relationships and the business rules. `?` marks an optional column and `FK` a foreign key. Timestamps are left out. `Media` stands for Media Library's own table: a thread or a post can have one optional image.
 
-## Contributing
+<details>
+<summary>Database tables (ER diagram)</summary>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```mermaid
+erDiagram
+    Board ||--o{ Thread : "threads() / board()"
+    User ||--o{ Thread : "threads() / user()"
+    User ||--o{ Post : "posts() / user()"
+    Thread ||--o{ Post : "posts() / thread()"
+    Thread ||--o| Media : "image"
+    Post ||--o| Media : "image"
 
-## Code of Conduct
+    User {
+        id id PK
+        string name
+        string email UK
+        string password
+        boolean is_admin
+    }
+    Board {
+        id id PK
+        string slug UK
+        string title
+        string description "nullable"
+    }
+    Thread {
+        id id PK
+        id board_id FK
+        id user_id FK
+        string name "nullable"
+        string subject "nullable"
+        text text
+        datetime bumped_at
+    }
+    Post {
+        id id PK
+        id thread_id FK
+        id user_id FK
+        string name "nullable"
+        text text
+    }
+    Media {
+        id id PK
+        string model_type "Thread or Post"
+        id model_id
+        string collection_name "image"
+        string file_name
+    }
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Each line is one relationship, labelled with its `hasMany` and `belongsTo` methods. `Media` is Media Library's table: it points to a thread or a post through `model_type` and `model_id` (a polymorphic relationship), and the `image` collection holds at most one image. Timestamps are left out.
 
-## Security Vulnerabilities
+</details>
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Run
 
-## License
+```sh
+composer run setup
+php artisan migrate:fresh --seed
+composer run dev
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Open [http://localhost:8000](http://localhost:8000).
+
+Seeded accounts:
+
+- Admin: `Admin` — `admin@example.com`
+- Test: `Test User` — `test@example.com`
+
+## next additions
+
+- guest posting
+- poster ids per thread
+- sage replies and bump limits
