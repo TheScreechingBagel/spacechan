@@ -16,8 +16,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        if (! session()->has('url.intended')) {
-            redirect()->setIntendedUrl(url()->previous());
+        $previousUrl = url()->previous();
+        $isOnThisSite = parse_url($previousUrl, PHP_URL_HOST) === request()->getHost();
+
+        // only go back to pages of this site, never to the website that linked here
+        if (! session()->has('url.intended') && $isOnThisSite) {
+            redirect()->setIntendedUrl($previousUrl);
         }
 
         return view('auth.login');
