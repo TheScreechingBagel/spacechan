@@ -1,6 +1,8 @@
-# 1. FrankenPHP with the deSEC DNS module, so Caddy can get Let's Encrypt
-#    certificates through the DNS-01 challenge (works on a private IP).
-#    No XCADDY_SETCAP: compose lets nonroot bind 80/443 through a sysctl instead.
+# 1. FrankenPHP with two extra Caddy modules:
+#    - caddy-dns/desec: Let's Encrypt certificates through the DNS-01 challenge
+#      (works on a private IP);
+#    - caddy-dynamicdns: keeps the A record pointed at the machine's local IP.
+#    No XCADDY_SETCAP: nonroot binds 80/443 through a host sysctl instead.
 FROM dunglas/frankenphp:1-builder-php8.5-trixie AS caddy
 COPY --from=caddy:builder /usr/bin/xcaddy /usr/bin/xcaddy
 RUN CGO_ENABLED=1 \
@@ -11,7 +13,8 @@ RUN CGO_ENABLED=1 \
         --output /usr/local/bin/frankenphp \
         --with github.com/dunglas/frankenphp=./ \
         --with github.com/dunglas/frankenphp/caddy=./caddy/ \
-        --with github.com/caddy-dns/desec
+        --with github.com/caddy-dns/desec \
+        --with github.com/mholt/caddy-dynamicdns
 
 # 2. Frontend assets (Vite + Tailwind)
 FROM node:22-alpine AS assets
@@ -82,9 +85,9 @@ ENV APP_ENV=production \
 
 USER nonroot
 WORKDIR /app
-# nonroot can only bind ports below 1024 because compose sets the sysctl
-# net.ipv4.ip_unprivileged_port_start=0 (it applies to this container only).
-# Without it, run with `--sysctl net.ipv4.ip_unprivileged_port_start=0`.
+# The container uses host networking (so Caddy sees the machine's real IP),
+# so nonroot can only bind ports below 1024 if the host allows it:
+# sysctl net.ipv4.ip_unprivileged_port_start=80 (keep it in /etc/sysctl.d/).
 EXPOSE 80 443 443/udp
 
 ENTRYPOINT ["/usr/local/bin/frankenphp"]

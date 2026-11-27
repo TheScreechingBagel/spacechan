@@ -5,13 +5,10 @@ services:
       dockerfile: Containerfile
     restart: unless-stopped
     env_file: container/.env
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    # Lets nonroot bind 80/443 inside the container without any capability.
-    sysctls:
-      - net.ipv4.ip_unprivileged_port_start=0
+    # Host networking, so Caddy can read the machine's LAN IP for the A record.
+    # It listens on 80 and 443 (tcp and udp) directly; see the Containerfile
+    # for the sysctl the host needs.
+    network_mode: host
     volumes:
       - storage:/app/storage
       - caddy_data:/data

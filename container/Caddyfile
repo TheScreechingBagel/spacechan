@@ -1,8 +1,25 @@
 {
 	frankenphp
+
+	# Host networking would expose the admin API on the host's localhost:2019.
+	admin off
+
+	# Keeps the A record of the site pointed at this machine's local IP.
+	dynamic_dns {
+		provider desec {
+			token {env.DESEC_TOKEN}
+		}
+		domains {
+			{$DOMAIN} {$SUBDOMAIN}
+		}
+		ip_source interface {$LAN_INTERFACE}
+		versions ipv4
+		ttl 60s
+		check_interval 1m
+	}
 }
 
-{$SERVER_NAME} {
+{$SUBDOMAIN}.{$DOMAIN} {
 	tls {
 		dns desec {
 			token {env.DESEC_TOKEN}
