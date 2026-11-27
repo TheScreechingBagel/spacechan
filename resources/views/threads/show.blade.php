@@ -10,7 +10,7 @@
             Anonymous
         @endif</strong>
         @if ($thread->isOwnedBy(auth()->user()))
-            (You)
+            <span class="text-green-700">(You)</span>
         @endif
         @if (auth()->user()?->is_admin)
             [{{ $thread->user->name }}]
@@ -41,7 +41,7 @@
                         Anonymous
                     @endif</strong>
                     @if ($post->isOwnedBy(auth()->user()))
-                        (You)
+                        <span class="text-green-700">(You)</span>
                     @endif
                     @if (auth()->user()?->is_admin)
                         [{{ $post->user->name }}]

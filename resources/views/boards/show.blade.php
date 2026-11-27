@@ -24,7 +24,7 @@
                     Anonymous
                 @endif</strong>
                 @if ($thread->isOwnedBy(auth()->user()))
-                    (You)
+                    <span class="text-green-700">(You)</span>
                 @endif
                 on {{ $thread->created_at }}</p>
 
