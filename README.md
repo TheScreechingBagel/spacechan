@@ -144,7 +144,7 @@ composer run dev
 
 Open [http://localhost:8000](http://localhost:8000).
 
-Seeded accounts:
+Seeded accounts, both with the password `password`:
 
 - Admin: `Admin` — `admin@example.com`
 - Test: `Test User` — `test@example.com`
