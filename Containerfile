@@ -84,6 +84,7 @@ ENV APP_ENV=production \
     DB_DATABASE=/app/storage/database.sqlite \
     QUEUE_CONNECTION=sync \
     SESSION_DRIVER=file \
+    SESSION_SECURE_COOKIE=true \
     CACHE_STORE=file
 
 USER nonroot
