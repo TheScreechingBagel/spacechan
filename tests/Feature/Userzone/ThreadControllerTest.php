@@ -69,6 +69,24 @@ it('rejects an upload that is not an image', function () {
     expect(Thread::count())->toBe(0);
 });
 
+it('rejects an image with a web page file name', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    $board = Board::factory()->create();
+
+    // a real JPEG under an .html name, which a browser would open as a web page
+    $photo = UploadedFile::fake()->image('photo.jpg');
+    $disguisedImage = new UploadedFile($photo->getPathname(), 'page.html', test: true);
+
+    $response = $this->actingAs($user)->post(route('userzone.boards.threads.store', $board), [
+        'text' => 'With a disguised file',
+        'image' => $disguisedImage,
+    ]);
+
+    $response->assertSessionHasErrors(['image']);
+    expect(Thread::count())->toBe(0);
+});
+
 it('lets the owner delete their thread and its replies', function () {
     $user = User::factory()->create();
     $thread = Thread::factory()->for($user)->create();

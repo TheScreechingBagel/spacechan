@@ -14,7 +14,7 @@ class PostController extends Controller
             'thread_id' => ['required', 'exists:threads,id'],
             'name' => ['nullable', 'string', 'max:64'],
             'text' => ['required', 'string', 'max:10000'],
-            'image' => ['nullable', 'image', 'max:4096', 'mimes:jpg,jpeg,png,gif,webp'],
+            'image' => ['nullable', 'image', 'max:4096', 'mimes:jpg,jpeg,png,gif,webp', 'extensions:jpg,jpeg,png,gif,webp'],
         ]);
 
         $post = Post::create([

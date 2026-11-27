@@ -63,6 +63,25 @@ it('rejects a reply upload that is not an image', function () {
     expect(Post::count())->toBe(0);
 });
 
+it('rejects a reply image with a web page file name', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    $thread = Thread::factory()->create();
+
+    // a real JPEG under an .html name, which a browser would open as a web page
+    $photo = UploadedFile::fake()->image('photo.jpg');
+    $disguisedImage = new UploadedFile($photo->getPathname(), 'page.html', test: true);
+
+    $response = $this->actingAs($user)->post(route('userzone.posts.store'), [
+        'thread_id' => $thread->id,
+        'text' => 'With a disguised file',
+        'image' => $disguisedImage,
+    ]);
+
+    $response->assertSessionHasErrors(['image']);
+    expect(Post::count())->toBe(0);
+});
+
 it('bumps the thread when someone replies', function () {
     $user = User::factory()->create();
     $thread = Thread::factory()->create(['bumped_at' => '2026-01-01 00:00:00']);

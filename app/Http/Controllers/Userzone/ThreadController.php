@@ -24,7 +24,7 @@ class ThreadController extends Controller
             'name' => ['nullable', 'string', 'max:64'],
             'subject' => ['nullable', 'string', 'max:128'],
             'text' => ['required', 'string', 'max:10000'],
-            'image' => ['nullable', 'image', 'max:4096', 'mimes:jpg,jpeg,png,gif,webp'],
+            'image' => ['nullable', 'image', 'max:4096', 'mimes:jpg,jpeg,png,gif,webp', 'extensions:jpg,jpeg,png,gif,webp'],
         ]);
 
         $thread = $board->threads()->create([
