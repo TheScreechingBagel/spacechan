@@ -38,8 +38,7 @@ class DatabaseSeeder extends Seeder
 
         $boards = Board::all();
 
-        Thread::factory(12)->withImage()->recycle($boards)->recycle($users)->create();
-        Thread::factory(3)->recycle($boards)->recycle($users)->create();
+        Thread::factory(15)->withImage()->recycle($boards)->recycle($users)->create();
         $threads = Thread::all();
 
         foreach ($threads as $thread) {
