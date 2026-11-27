@@ -1,6 +1,6 @@
 # 1. FrankenPHP with the deSEC DNS module, so Caddy can get Let's Encrypt
 #    certificates through the DNS-01 challenge (works on a private IP).
-#    No XCADDY_SETCAP: we listen on ports above 1024 and need no capabilities.
+#    No XCADDY_SETCAP: compose lets nonroot bind 80/443 through a sysctl instead.
 FROM dunglas/frankenphp:1-builder-php8.5-trixie AS caddy
 COPY --from=caddy:builder /usr/bin/xcaddy /usr/bin/xcaddy
 RUN CGO_ENABLED=1 \
@@ -82,7 +82,10 @@ ENV APP_ENV=production \
 
 USER nonroot
 WORKDIR /app
-EXPOSE 8080 8443
+# nonroot can only bind ports below 1024 because compose sets the sysctl
+# net.ipv4.ip_unprivileged_port_start=0 (it applies to this container only).
+# Without it, run with `--sysctl net.ipv4.ip_unprivileged_port_start=0`.
+EXPOSE 80 443 443/udp
 
 ENTRYPOINT ["/usr/local/bin/frankenphp"]
 CMD ["run", "--config", "/etc/frankenphp/Caddyfile"]

@@ -6,8 +6,12 @@ services:
     restart: unless-stopped
     env_file: container/.env
     ports:
-      - "80:8080"
-      - "443:8443"
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    # Lets nonroot bind 80/443 inside the container without any capability.
+    sysctls:
+      - net.ipv4.ip_unprivileged_port_start=0
     volumes:
       - storage:/app/storage
       - caddy_data:/data
